@@ -42,7 +42,10 @@ export default function ColoringPicker() {
                 accessibilityRole="button"
                 accessibilityLabel={`Color the ${p.title}`}
                 onPress={() => playSound("tap")}
-                className="h-44 w-44 items-center justify-center rounded-xl bg-surface shadow-card transition active:scale-95"
+                style={({ pressed }) => ({
+                  transform: [{ scale: pressed ? 0.95 : 1 }],
+                })}
+                className="h-44 w-44 items-center justify-center rounded-xl bg-surface shadow-card"
               >
                 {/* the actual outline — pre-readers recognise the drawing */}
                 <View pointerEvents="none">

@@ -28,7 +28,8 @@ export default function HomeScreen() {
           accessibilityLabel={soundOn ? "Turn sound off" : "Turn sound on"}
           onPress={toggleSound}
           hitSlop={12}
-          className="h-12 w-12 items-center justify-center rounded-full bg-ink/10 transition active:scale-90"
+          style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1 })}
+          className="h-12 w-12 items-center justify-center rounded-full bg-ink/10"
         >
           <Text style={{ fontSize: 22 }}>{soundOn ? "🔊" : "🔇"}</Text>
         </Pressable>
@@ -43,7 +44,10 @@ export default function HomeScreen() {
                 accessibilityRole="button"
                 accessibilityLabel={game.title}
                 onPress={() => playSound("tap")}
-                className={`${game.color} h-52 w-52 items-center justify-center gap-3 rounded-xl shadow-raised transition active:scale-95`}
+                style={({ pressed }) => ({
+                  transform: [{ scale: pressed ? 0.95 : 1 }],
+                })}
+                className={`${game.color} h-52 w-52 items-center justify-center gap-3 rounded-xl shadow-raised`}
               >
                 <Text style={{ fontSize: 84 }}>{game.emoji}</Text>
                 <Txt variant="label" style={{ color: "#FFFFFF" }}>

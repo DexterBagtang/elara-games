@@ -66,7 +66,8 @@ export default function ColoringScreen() {
         <Txt variant="title">Picture not found</Txt>
         <Pressable
           onPress={() => router.back()}
-          className="mt-4 rounded-full bg-berry px-6 py-3 transition active:scale-95"
+          style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+          className="mt-4 rounded-full bg-berry px-6 py-3"
         >
           <Txt variant="label" style={{ color: "#FFFFFF" }}>
             Go back
@@ -121,15 +122,15 @@ export default function ColoringScreen() {
               key={s.id}
               accessibilityRole="button"
               accessibilityLabel={s.label}
+              accessibilityState={{ selected: isSelected }}
+              hitSlop={6}
               onPress={() => {
                 Haptics.selectionAsync();
                 playSound("tap");
                 setSelected(s);
               }}
-              className={`h-16 w-16 items-center justify-center rounded-full transition ${
-                isSelected ? "-translate-y-1 scale-110" : ""
-              }`}
-              style={{
+              className="h-16 w-16 items-center justify-center rounded-full"
+              style={({ pressed }) => ({
                 backgroundColor: s.color,
                 borderWidth: isSelected ? 5 : 3,
                 borderColor: isSelected
@@ -137,7 +138,11 @@ export default function ColoringScreen() {
                   : isEraser
                     ? "#D4D4D4"
                     : "#FFFFFF",
-              }}
+                transform: [
+                  { scale: isSelected ? 1.12 : pressed ? 0.94 : 1 },
+                  { translateY: isSelected ? -4 : 0 },
+                ],
+              })}
             >
               {isEraser && <Text style={{ fontSize: 22 }}>🧽</Text>}
             </Pressable>

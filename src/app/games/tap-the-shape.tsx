@@ -63,13 +63,14 @@ export default function TapTheShape() {
           accessibilityRole="button"
           accessibilityLabel="Tap the shape"
           onPress={onTapShape}
-          className="absolute items-center justify-center rounded-xl bg-surface shadow-card transition active:scale-90"
-          style={{
+          className="absolute items-center justify-center rounded-xl bg-surface shadow-card"
+          style={({ pressed }) => ({
             width: SHAPE_SIZE,
             height: SHAPE_SIZE,
             left: pos.x,
             top: pos.y,
-          }}
+            transform: [{ scale: pressed ? 0.9 : 1 }],
+          })}
         >
           <Breathing>
             <Text style={{ fontSize: 92 }}>{shape}</Text>
