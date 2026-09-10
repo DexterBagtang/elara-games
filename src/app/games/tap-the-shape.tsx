@@ -4,10 +4,13 @@ import { useCallback, useState } from "react";
 import { LayoutChangeEvent, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { Breathing } from "@/components/Breathing";
+import { HoldButton } from "@/components/HoldButton";
+import { Txt } from "@/components/Txt";
 import { playSound } from "@/game/sounds";
 
-const SHAPES = ["⭐️", "🔵", "🔺", "❤️", "🟩", "🌙"] as const;
-const SHAPE_SIZE = 120;
+const SHAPES = ["⭐️", "🔵", "🔺", "❤️", "🟩", "🌙", "🟠", "💜"] as const;
+const SHAPE_SIZE = 150;
 
 type Pos = { x: number; y: number };
 
@@ -40,33 +43,37 @@ export default function TapTheShape() {
   }, [area]);
 
   return (
-    <SafeAreaView className="flex-1 bg-sky">
-      {/* parent gate: long-press to leave */}
-      <Pressable
-        onLongPress={() => router.back()}
-        delayLongPress={700}
-        className="absolute left-4 top-4 z-10 h-14 w-14 items-center justify-center rounded-full bg-white/40"
-      >
-        <Text className="text-2xl">🏠</Text>
-      </Pressable>
-
-      <Text className="mt-4 text-center text-3xl font-extrabold text-white">
-        {score}
-      </Text>
+    <SafeAreaView className="flex-1 bg-bg">
+      <View className="flex-row items-center gap-4 px-6 pt-2">
+        <HoldButton
+          emoji="🏠"
+          accessibilityLabel="Go home"
+          onHold={() => router.back()}
+        />
+        <View className="flex-row items-center gap-2">
+          <Text style={{ fontSize: 30 }}>⭐️</Text>
+          <Txt variant="huge" style={{ fontSize: 34 }}>
+            {score}
+          </Txt>
+        </View>
+      </View>
 
       <View className="flex-1" onLayout={onLayout}>
         <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Tap the shape"
           onPress={onTapShape}
-          className="absolute items-center justify-center rounded-3xl bg-white active:scale-90"
+          className="absolute items-center justify-center rounded-xl bg-surface shadow-card transition active:scale-90"
           style={{
             width: SHAPE_SIZE,
             height: SHAPE_SIZE,
             left: pos.x,
             top: pos.y,
-            elevation: 6,
           }}
         >
-          <Text style={{ fontSize: 72 }}>{shape}</Text>
+          <Breathing>
+            <Text style={{ fontSize: 92 }}>{shape}</Text>
+          </Breathing>
         </Pressable>
       </View>
     </SafeAreaView>

@@ -1,19 +1,17 @@
 import * as Haptics from "expo-haptics";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  LayoutChangeEvent,
-  Pressable,
-  Text,
-  View,
-} from "react-native";
+import { LayoutChangeEvent, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Celebration } from "@/game/Celebration";
 import { ColoringCanvas } from "@/game/ColoringCanvas";
+import { HoldButton } from "@/components/HoldButton";
+import { Txt } from "@/components/Txt";
 import { BLANK, ERASER, PALETTE, type Swatch } from "@/game/palette";
 import { getPicture } from "@/game/pictures";
 import { playSound } from "@/game/sounds";
+import { theme } from "@/theme";
 
 const SWATCHES: Swatch[] = [...PALETTE, ERASER];
 
@@ -30,7 +28,7 @@ export default function ColoringScreen() {
 
   const onCanvasLayout = useCallback((e: LayoutChangeEvent) => {
     const { width, height } = e.nativeEvent.layout;
-    setCanvas(Math.max(0, Math.min(width, height) - 12));
+    setCanvas(Math.max(0, Math.min(width, height) - 8));
   }, []);
 
   const onTapRegion = useCallback(
@@ -64,47 +62,44 @@ export default function ColoringScreen() {
 
   if (!picture) {
     return (
-      <SafeAreaView className="flex-1 items-center justify-center bg-[#FFFDF5]">
-        <Text className="text-xl text-neutral-500">Picture not found</Text>
+      <SafeAreaView className="flex-1 items-center justify-center bg-bg">
+        <Txt variant="title">Picture not found</Txt>
         <Pressable
           onPress={() => router.back()}
-          className="mt-4 rounded-full bg-berry px-6 py-3"
+          className="mt-4 rounded-full bg-berry px-6 py-3 transition active:scale-95"
         >
-          <Text className="text-lg font-bold text-white">Go back</Text>
+          <Txt variant="label" style={{ color: "#FFFFFF" }}>
+            Go back
+          </Txt>
         </Pressable>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-[#FFFDF5]">
-      {/* top bar */}
+    <SafeAreaView className="flex-1 bg-bg">
+      {/* top bar — both actions are hold-to-fire, toddler-proof */}
       <View className="flex-row items-center justify-between px-6 pt-2">
-        <Pressable
-          onLongPress={() => router.back()}
-          delayLongPress={600}
-          className="h-14 w-14 items-center justify-center rounded-full bg-black/10"
-        >
-          <Text className="text-2xl">🏠</Text>
-        </Pressable>
-
-        <Text className="text-xl font-extrabold text-neutral-700">
+        <HoldButton
+          emoji="🏠"
+          accessibilityLabel="Go home"
+          onHold={() => router.back()}
+        />
+        <Txt variant="title">
           {picture.emoji} {picture.title}
-        </Text>
-
-        <Pressable
-          onLongPress={reset}
-          delayLongPress={600}
-          className="h-14 items-center justify-center rounded-full bg-black/10 px-4"
-        >
-          <Text className="text-xs font-bold text-neutral-600">
-            hold to{"\n"}clear
-          </Text>
-        </Pressable>
+        </Txt>
+        <HoldButton
+          emoji="🗑️"
+          accessibilityLabel="Clear the picture"
+          onHold={reset}
+        />
       </View>
 
       {/* canvas */}
-      <View className="flex-1 items-center justify-center" onLayout={onCanvasLayout}>
+      <View
+        className="flex-1 items-center justify-center"
+        onLayout={onCanvasLayout}
+      >
         {canvas > 0 && (
           <ColoringCanvas
             picture={picture}
@@ -116,28 +111,35 @@ export default function ColoringScreen() {
         )}
       </View>
 
-      {/* palette strip */}
-      <View className="flex-row flex-wrap items-center justify-center gap-2 px-4 pb-2 pt-1">
+      {/* palette — one row, big targets, selected lifts + rings */}
+      <View className="flex-row flex-wrap items-end justify-center gap-3 px-4 pb-3">
         {SWATCHES.map((s) => {
           const isSelected = s.id === selected.id;
           const isEraser = s.id === ERASER.id;
           return (
             <Pressable
               key={s.id}
+              accessibilityRole="button"
+              accessibilityLabel={s.label}
               onPress={() => {
                 Haptics.selectionAsync();
                 playSound("tap");
                 setSelected(s);
               }}
-              className={`h-12 w-12 items-center justify-center rounded-full border-4 ${
-                isSelected ? "border-neutral-800" : "border-white"
+              className={`h-16 w-16 items-center justify-center rounded-full transition ${
+                isSelected ? "-translate-y-1 scale-110" : ""
               }`}
               style={{
                 backgroundColor: s.color,
-                borderColor: isEraser && !isSelected ? "#D4D4D4" : undefined,
+                borderWidth: isSelected ? 5 : 3,
+                borderColor: isSelected
+                  ? theme.color.ink
+                  : isEraser
+                    ? "#D4D4D4"
+                    : "#FFFFFF",
               }}
             >
-              {isEraser && <Text className="text-lg">🧽</Text>}
+              {isEraser && <Text style={{ fontSize: 22 }}>🧽</Text>}
             </Pressable>
           );
         })}

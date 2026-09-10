@@ -3,8 +3,9 @@ import Svg, { Circle, Ellipse, Path, Polygon, Rect } from "react-native-svg";
 
 import { BLANK } from "@/game/palette";
 import type { Picture, Region } from "@/game/pictures";
+import { theme } from "@/theme";
 
-const STROKE = "#1F2937";
+const STROKE = theme.color.ink;
 const STROKE_W = 3;
 
 type Props = {

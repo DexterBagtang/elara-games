@@ -1,57 +1,71 @@
 import * as Haptics from "expo-haptics";
-import { useEffect, useRef } from "react";
-import { Animated, Easing, Pressable, Text, View } from "react-native";
+import { useEffect } from "react";
+import { Pressable, View } from "react-native";
+import Animated, { useReducedMotion } from "react-native-reanimated";
 
-const EMOJI = ["🎉", "🌟", "🎈", "✨", "🦄"];
+import { Txt } from "@/components/Txt";
+
+const EMOJI = ["🎉", "⭐️", "🎈", "✨", "🌈", "🦄", "🍭", "💖"];
+
+const POP = {
+  "0%": { transform: [{ scale: 0.5 }], opacity: 0 },
+  "60%": { transform: [{ scale: 1.15 }], opacity: 1 },
+  "100%": { transform: [{ scale: 1 }], opacity: 1 },
+};
+
+const RISE = {
+  "0%": { transform: [{ translateY: 10 }, { rotate: "0deg" }], opacity: 0 },
+  "15%": { opacity: 1 },
+  "100%": { transform: [{ translateY: -170 }, { rotate: "300deg" }], opacity: 0 },
+};
 
 export function Celebration({ onDone }: { onDone: () => void }) {
-  const anims = useRef(EMOJI.map(() => new Animated.Value(0))).current;
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    Animated.stagger(
-      90,
-      anims.map((a) =>
-        Animated.spring(a, {
-          toValue: 1,
-          friction: 4,
-          tension: 80,
-          useNativeDriver: true,
-        })
-      )
-    ).start();
-
     const t = setTimeout(onDone, 2400);
     return () => clearTimeout(t);
-  }, [anims, onDone]);
+  }, [onDone]);
 
   return (
     <Pressable
       onPress={onDone}
-      className="absolute inset-0 items-center justify-center bg-white/70"
+      accessibilityRole="button"
+      accessibilityLabel="All done"
+      className="absolute bottom-0 left-0 right-0 top-0 items-center justify-center bg-surface/70"
     >
-      <View className="flex-row gap-2">
-        {EMOJI.map((e, i) => (
-          <Animated.Text
-            key={i}
-            style={{
-              fontSize: 56,
-              transform: [
-                { scale: anims[i] },
-                {
-                  translateY: anims[i].interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [40, 0],
-                  }),
-                },
-              ],
-            }}
-          >
-            {e}
-          </Animated.Text>
-        ))}
-      </View>
-      <Text className="mt-6 text-5xl font-extrabold text-grape">Yay!</Text>
+      {!reduced && (
+        <View className="absolute flex-row gap-4">
+          {EMOJI.map((e, i) => (
+            <Animated.Text
+              key={i}
+              style={{
+                fontSize: 40,
+                animationName: RISE,
+                animationDuration: 1600,
+                animationDelay: i * 110,
+                animationTimingFunction: "ease-out",
+                animationIterationCount: 1,
+                animationFillMode: "both",
+              }}
+            >
+              {e}
+            </Animated.Text>
+          ))}
+        </View>
+      )}
+
+      <Animated.View
+        style={{
+          animationName: POP,
+          animationDuration: 450,
+          animationTimingFunction: "ease-out",
+          animationFillMode: "both",
+        }}
+      >
+        <Txt variant="huge">Yay!</Txt>
+      </Animated.View>
     </Pressable>
   );
 }

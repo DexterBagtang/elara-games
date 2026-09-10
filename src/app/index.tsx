@@ -1,8 +1,10 @@
 import { Link } from "expo-router";
 import { useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { Breathing } from "@/components/Breathing";
+import { Txt } from "@/components/Txt";
 import { GAMES } from "@/game/games";
 import { isSoundEnabled, playSound, setSoundEnabled } from "@/game/sounds";
 
@@ -17,39 +19,41 @@ export default function HomeScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#FFFDF5]">
-      <View className="flex-row items-start justify-between px-8 pt-4 pb-2">
-        <View>
-          <Text className="text-4xl font-extrabold text-grape">Elara Games</Text>
-          <Text className="text-lg text-neutral-500">Pick a game to play</Text>
-        </View>
+    <SafeAreaView className="flex-1 bg-bg">
+      {/* grown-up chrome — small, out of the way */}
+      <View className="flex-row items-center justify-between px-6 pt-3">
+        <Txt variant="display">Elara Games</Txt>
         <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={soundOn ? "Turn sound off" : "Turn sound on"}
           onPress={toggleSound}
-          className="h-14 w-14 items-center justify-center rounded-full bg-black/10"
+          hitSlop={12}
+          className="h-12 w-12 items-center justify-center rounded-full bg-ink/10 transition active:scale-90"
         >
-          <Text className="text-2xl">{soundOn ? "🔊" : "🔇"}</Text>
+          <Text style={{ fontSize: 22 }}>{soundOn ? "🔊" : "🔇"}</Text>
         </Pressable>
       </View>
 
-      <ScrollView
-        contentContainerClassName="flex-row flex-wrap gap-6 p-8"
-        showsVerticalScrollIndicator={false}
-      >
-        {GAMES.map((game) => (
-          <Link key={game.id} href={game.route} asChild>
-            <Pressable
-              onPress={() => playSound("tap")}
-              className={`${game.color} h-44 w-44 items-center justify-center rounded-3xl active:scale-95`}
-              style={{ elevation: 4 }}
-            >
-              <Text className="text-6xl">{game.emoji}</Text>
-              <Text className="mt-3 text-xl font-bold text-white">
-                {game.title}
-              </Text>
-            </Pressable>
-          </Link>
+      {/* the toddler's whole world: big pokeable cards, centered */}
+      <View className="flex-1 flex-row flex-wrap items-center justify-center gap-8 p-6">
+        {GAMES.map((game, i) => (
+          <Breathing key={game.id} delay={i * 400}>
+            <Link href={game.route} asChild>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={game.title}
+                onPress={() => playSound("tap")}
+                className={`${game.color} h-52 w-52 items-center justify-center gap-3 rounded-xl shadow-raised transition active:scale-95`}
+              >
+                <Text style={{ fontSize: 84 }}>{game.emoji}</Text>
+                <Txt variant="label" style={{ color: "#FFFFFF" }}>
+                  {game.title}
+                </Txt>
+              </Pressable>
+            </Link>
+          </Breathing>
         ))}
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
