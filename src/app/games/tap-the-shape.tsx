@@ -1,13 +1,10 @@
 import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
 import { useCallback, useState } from "react";
-import {
-  LayoutChangeEvent,
-  Pressable,
-  Text,
-  View,
-} from "react-native";
+import { LayoutChangeEvent, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+import { playSound } from "@/game/sounds";
 
 const SHAPES = ["⭐️", "🔵", "🔺", "❤️", "🟩", "🌙"] as const;
 const SHAPE_SIZE = 120;
@@ -36,6 +33,7 @@ export default function TapTheShape() {
 
   const onTapShape = useCallback(() => {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    playSound("pop");
     setScore((s) => s + 1);
     setShape(SHAPES[Math.floor(Math.random() * SHAPES.length)]);
     setPos(randomPos(area.w, area.h));

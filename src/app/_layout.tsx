@@ -6,6 +6,8 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 
+import { initSounds } from "@/game/sounds";
+
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -13,6 +15,7 @@ export default function RootLayout() {
   useKeepAwake();
 
   useEffect(() => {
+    initSounds();
     SplashScreen.hideAsync();
   }, []);
 

@@ -3,6 +3,7 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { PICTURES } from "@/game/pictures";
+import { playSound } from "@/game/sounds";
 
 export default function ColoringPicker() {
   const router = useRouter();
@@ -35,7 +36,10 @@ export default function ColoringPicker() {
             }}
             asChild
           >
-            <Pressable className="h-40 w-40 items-center justify-center rounded-3xl bg-white active:scale-95 border-4 border-neutral-200">
+            <Pressable
+              onPress={() => playSound("tap")}
+              className="h-40 w-40 items-center justify-center rounded-3xl bg-white active:scale-95 border-4 border-neutral-200"
+            >
               <Text className="text-6xl">{p.emoji}</Text>
               <Text className="mt-2 text-lg font-bold text-neutral-700">
                 {p.title}

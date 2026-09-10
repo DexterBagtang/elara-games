@@ -32,7 +32,15 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
         }
-      ]
+      ],
+      [
+        "expo-audio",
+        {
+          "enableBackgroundPlayback": false,
+          "microphonePermission": false
+        }
+      ],
+      "expo-asset"
     ],
     "experiments": {
       "typedRoutes": true,

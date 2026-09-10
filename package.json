@@ -5,6 +5,8 @@
   "dependencies": {
     "@expo/ui": "~57.0.17",
     "expo": "~57.0.21",
+    "expo-asset": "~57.0.16",
+    "expo-audio": "~57.0.4",
     "expo-constants": "~57.0.17",
     "expo-device": "~57.0.1",
     "expo-font": "~57.0.3",
@@ -45,7 +47,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "gen:pictures": "node ./scripts/generate-pictures.mjs"
+    "gen:pictures": "node ./scripts/generate-pictures.mjs",
+    "gen:sounds": "node ./scripts/generate-sounds.mjs"
   },
   "private": true
 }

@@ -13,6 +13,7 @@ import { Celebration } from "@/game/Celebration";
 import { ColoringCanvas } from "@/game/ColoringCanvas";
 import { BLANK, ERASER, PALETTE, type Swatch } from "@/game/palette";
 import { getPicture } from "@/game/pictures";
+import { playSound } from "@/game/sounds";
 
 const SWATCHES: Swatch[] = [...PALETTE, ERASER];
 
@@ -35,6 +36,7 @@ export default function ColoringScreen() {
   const onTapRegion = useCallback(
     (id: string) => {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      playSound("pop");
       setFills((prev) => ({ ...prev, [id]: selected.color }));
     },
     [selected]
@@ -56,6 +58,7 @@ export default function ColoringScreen() {
     if (done) {
       setCelebrated(true);
       setShowCelebration(true);
+      playSound("win");
     }
   }, [fills, picture, celebrated]);
 
@@ -123,6 +126,7 @@ export default function ColoringScreen() {
               key={s.id}
               onPress={() => {
                 Haptics.selectionAsync();
+                playSound("tap");
                 setSelected(s);
               }}
               className={`h-12 w-12 items-center justify-center rounded-full border-4 ${
