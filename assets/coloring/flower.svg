@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" data-title="Flower" data-emoji="🌸">
+  <path id="stem" d="M114 150 C 110 180 112 205 120 228 C 128 205 130 180 126 150 Z"/>
+  <path id="leaf-left" d="M116 176 C 84 164 54 168 38 190 C 64 202 100 200 118 186 Z"/>
+  <path id="leaf-right" d="M124 200 C 152 190 182 194 198 212 C 176 224 140 222 122 210 Z"/>
+  <path id="petal-1" d="M120 95 C 95 60 95 22 120 14 C 145 22 145 60 120 95 Z"/>
+  <path id="petal-2" d="M120 95 C 95 60 95 22 120 14 C 145 22 145 60 120 95 Z" transform="rotate(72 120 95)"/>
+  <path id="petal-3" d="M120 95 C 95 60 95 22 120 14 C 145 22 145 60 120 95 Z" transform="rotate(144 120 95)"/>
+  <path id="petal-4" d="M120 95 C 95 60 95 22 120 14 C 145 22 145 60 120 95 Z" transform="rotate(216 120 95)"/>
+  <path id="petal-5" d="M120 95 C 95 60 95 22 120 14 C 145 22 145 60 120 95 Z" transform="rotate(288 120 95)"/>
+  <circle id="center" cx="120" cy="95" r="26"/>
+</svg>

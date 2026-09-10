@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" data-title="Rocket" data-emoji="🚀">
+  <circle id="star-1" cx="40" cy="48" r="7"/>
+  <circle id="star-2" cx="202" cy="62" r="7"/>
+  <circle id="star-3" cx="34" cy="150" r="6"/>
+  <path id="flame" d="M94 168 C 84 196 92 224 120 240 C 148 224 156 196 146 168 Z"/>
+  <path id="fin-left" d="M88 140 C 62 152 46 182 50 202 C 72 196 88 176 94 156 Z"/>
+  <path id="fin-right" d="M152 140 C 178 152 194 182 190 202 C 168 196 152 176 146 156 Z"/>
+  <path id="body" d="M120 18 C 150 44 158 96 152 142 C 152 162 88 162 88 142 C 82 96 90 44 120 18 Z"/>
+  <circle id="window" cx="120" cy="86" r="18"/>
+  <path id="nozzle" d="M96 150 L 144 150 L 136 168 L 104 168 Z"/>
+</svg>

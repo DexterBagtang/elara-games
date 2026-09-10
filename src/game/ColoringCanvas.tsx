@@ -1,11 +1,5 @@
 import { memo } from "react";
-import Svg, {
-  Circle,
-  Ellipse,
-  Path,
-  Polygon,
-  Rect,
-} from "react-native-svg";
+import Svg, { Circle, Ellipse, Path, Polygon, Rect } from "react-native-svg";
 
 import { BLANK } from "@/game/palette";
 import type { Picture, Region } from "@/game/pictures";
@@ -34,9 +28,11 @@ function RegionShape({
     fill,
     stroke: STROKE,
     strokeWidth: STROKE_W,
+    strokeLinejoin: "round" as const,
+    transform: region.transform,
     onPress,
     onPressIn: onPress,
-  } as const;
+  };
 
   switch (region.kind) {
     case "circle":
@@ -48,9 +44,6 @@ function RegionShape({
           cy={region.cy}
           rx={region.rx}
           ry={region.ry}
-          rotation={region.rotation ?? 0}
-          originX={region.cx}
-          originY={region.cy}
           {...common}
         />
       );
@@ -89,7 +82,7 @@ function ColoringCanvasBase({
           onPress={() => onTapRegion(region.id)}
         />
       ))}
-      {picture.decorations?.map((d, i) => (
+      {picture.decorations.map((d, i) => (
         <Path
           key={`deco-${i}`}
           d={d.d}

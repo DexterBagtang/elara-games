@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" data-title="Fish" data-emoji="🐠">
+  <g id="decorations">
+    <path d="M58 122 q 16 15 34 2"/>
+    <path d="M96 96 q 14 14 0 28"/>
+    <path d="M122 92 q 14 16 0 34"/>
+  </g>
+  <path id="tail" d="M168 120 C 194 94 214 80 228 76 C 222 100 222 140 228 164 C 214 160 194 146 168 120 Z"/>
+  <path id="fin-top" d="M92 80 C 108 48 136 42 152 46 C 142 62 120 76 100 84 Z"/>
+  <path id="fin-bottom" d="M92 160 C 108 192 136 198 152 194 C 142 178 120 164 100 156 Z"/>
+  <ellipse id="body" cx="104" cy="120" rx="70" ry="52"/>
+  <circle id="eye" cx="70" cy="104" r="11"/>
+  <circle id="bubble-1" cx="44" cy="64" r="10"/>
+  <circle id="bubble-2" cx="22" cy="38" r="7"/>
+  <circle id="bubble-3" cx="50" cy="30" r="6"/>
+</svg>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" data-title="Butterfly" data-emoji="🦋">
+  <g id="decorations">
+    <path d="M120 64 C 108 42 92 32 78 28"/>
+    <path d="M120 64 C 132 42 148 32 162 28"/>
+  </g>
+  <path id="wing-top-left" d="M120 78 C 96 32 44 24 26 52 C 18 80 34 106 70 114 C 100 120 120 104 120 78 Z"/>
+  <path id="wing-top-right" d="M120 78 C 144 32 196 24 214 52 C 222 80 206 106 170 114 C 140 120 120 104 120 78 Z"/>
+  <path id="wing-bottom-left" d="M120 120 C 100 128 58 130 46 160 C 38 186 66 212 94 200 C 116 190 122 150 120 120 Z"/>
+  <path id="wing-bottom-right" d="M120 120 C 140 128 182 130 194 160 C 202 186 174 212 146 200 C 124 190 118 150 120 120 Z"/>
+  <circle id="spot-left" cx="62" cy="70" r="12"/>
+  <circle id="spot-right" cx="178" cy="70" r="12"/>
+  <ellipse id="body" cx="120" cy="122" rx="10" ry="60"/>
+  <circle id="head" cx="120" cy="58" r="11"/>
+</svg>
