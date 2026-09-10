@@ -1,10 +1,12 @@
 import type { Href } from "expo-router";
 
+import { theme } from "@/theme";
+
 export type Game = {
   id: string;
   title: string;
   emoji: string;
-  color: string; // tailwind bg class
+  color: string; // card background (hex from the design tokens)
   route: Href;
 };
 
@@ -14,14 +16,21 @@ export const GAMES: Game[] = [
     id: "tap-the-shape",
     title: "Tap the Shape",
     emoji: "⭐️",
-    color: "bg-sun",
+    color: theme.color.sun,
     route: "/games/tap-the-shape",
   },
   {
     id: "coloring",
     title: "Coloring",
     emoji: "🎨",
-    color: "bg-berry",
+    color: theme.color.berry,
     route: "/games/coloring",
+  },
+  {
+    id: "animal-sounds",
+    title: "Animal Sounds",
+    emoji: "🐾",
+    color: theme.color.grass,
+    route: "/games/animal-sounds",
   },
 ];

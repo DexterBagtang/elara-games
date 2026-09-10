@@ -1,4 +1,4 @@
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { Pressable, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -8,6 +8,7 @@ import { Txt } from "@/components/Txt";
 import { ColoringCanvas } from "@/game/ColoringCanvas";
 import { PICTURES } from "@/game/pictures";
 import { playSound } from "@/game/sounds";
+import { theme } from "@/theme";
 
 const EMPTY = {} as Record<string, string>;
 
@@ -25,40 +26,52 @@ export default function ColoringPicker() {
         <Txt variant="title">Coloring</Txt>
       </View>
 
+      {/* one big row a toddler swipes sideways through — landscape has the
+          width, and side-swipe beats a vertical grid they have to scroll */}
       <ScrollView
-        contentContainerClassName="flex-row flex-wrap items-center justify-center gap-7 p-6"
-        showsVerticalScrollIndicator={false}
+        horizontal
+        className="flex-1"
+        contentContainerClassName="flex-row items-center gap-7 px-8 py-6"
+        showsHorizontalScrollIndicator={false}
       >
         {PICTURES.map((p, i) => (
           <Breathing key={p.id} delay={i * 300}>
-            <Link
-              href={{
-                pathname: "/games/coloring/[picture]",
-                params: { picture: p.id },
+            {/* plain Pressable, NOT <Link asChild>: expo-router's Slot merges a
+                function-form `style` as `{...fn}` === `{}` and drops the whole
+                card (size, surface, shadow). router.push keeps navigation. */}
+            <Pressable
+              {...({ cssInterop: false } as object)}
+              accessibilityRole="button"
+              accessibilityLabel={`Color the ${p.title}`}
+              onPress={() => {
+                playSound("tap");
+                router.push({
+                  pathname: "/games/coloring/[picture]",
+                  params: { picture: p.id },
+                });
               }}
-              asChild
+              style={({ pressed }) => ({
+                width: 176,
+                height: 176,
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: theme.radius.xl,
+                backgroundColor: theme.color.surface,
+                boxShadow: theme.shadow.card,
+                transform: [{ scale: pressed ? 0.95 : 1 }],
+              })}
             >
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel={`Color the ${p.title}`}
-                onPress={() => playSound("tap")}
-                style={({ pressed }) => ({
-                  transform: [{ scale: pressed ? 0.95 : 1 }],
-                })}
-                className="h-44 w-44 items-center justify-center rounded-xl bg-surface shadow-card"
-              >
-                {/* the actual outline — pre-readers recognise the drawing */}
-                <View pointerEvents="none">
-                  <ColoringCanvas
-                    picture={p}
-                    fills={EMPTY}
-                    onTapRegion={() => {}}
-                    width={150}
-                    height={150}
-                  />
-                </View>
-              </Pressable>
-            </Link>
+              {/* the actual outline — pre-readers recognise the drawing */}
+              <View pointerEvents="none">
+                <ColoringCanvas
+                  picture={p}
+                  fills={EMPTY}
+                  onTapRegion={() => {}}
+                  width={150}
+                  height={150}
+                />
+              </View>
+            </Pressable>
           </Breathing>
         ))}
       </ScrollView>

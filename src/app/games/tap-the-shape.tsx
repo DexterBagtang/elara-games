@@ -7,13 +7,16 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Breathing } from "@/components/Breathing";
 import { HoldButton } from "@/components/HoldButton";
 import { Txt } from "@/components/Txt";
+import { Celebration } from "@/game/Celebration";
 import { playSound } from "@/game/sounds";
 import { theme } from "@/theme";
 
 const SHAPES = ["⭐️", "🔵", "🔺", "❤️", "🟩", "🌙", "🟠", "💜"] as const;
-const SHAPE_SIZE = 140;
+const SHAPE_MAX = 168; // fat target — a 2yo taps where the shape *was*
+const SHAPE_MIN = 96; // ...but shrink before it would clip on a short screen
 const HEADER_H = 76;
 const PAD = 10;
+const CELEBRATE_EVERY = 5;
 
 type Pos = { x: number; y: number };
 
@@ -23,47 +26,75 @@ export default function TapTheShape() {
 
   // real size of the root view (fills the screen, so onLayout is reliable here)
   const size = useRef({ w: 0, h: 0 });
+  const taps = useRef(0);
   const [pos, setPos] = useState<Pos>({ x: 0, y: 0 });
+  const [shapeSize, setShapeSize] = useState(SHAPE_MAX);
   const [score, setScore] = useState(0);
   const [shape, setShape] = useState<string>(SHAPES[0]);
   const [ready, setReady] = useState(false);
+  const [celebrate, setCelebrate] = useState(false);
+
+  // largest shape that fits in the play area below the header, on both axes
+  const fitSize = useCallback(() => {
+    const { w, h } = size.current;
+    const availW = w - insets.left - insets.right - PAD * 2;
+    const availH = h - insets.top - insets.bottom - HEADER_H - PAD * 2;
+    return Math.max(SHAPE_MIN, Math.min(SHAPE_MAX, availW, availH));
+  }, [insets]);
 
   const pickPos = useCallback(
-    (from: Pos): Pos => {
+    (from: Pos, s: number): Pos => {
       const { w, h } = size.current;
       const minX = insets.left + PAD;
       const minY = insets.top + HEADER_H + PAD;
-      const spanX = Math.max(0, w - insets.right - SHAPE_SIZE - PAD - minX);
-      const spanY = Math.max(0, h - insets.bottom - SHAPE_SIZE - PAD - minY);
+      const spanX = Math.max(0, w - insets.right - s - PAD - minX);
+      const spanY = Math.max(0, h - insets.bottom - s - PAD - minY);
       for (let i = 0; i < 12; i++) {
         const p = {
           x: minX + Math.random() * spanX,
           y: minY + Math.random() * spanY,
         };
-        if (Math.hypot(p.x - from.x, p.y - from.y) > SHAPE_SIZE) return p;
+        // move a visible amount, but not a full fling across the screen —
+        // a near re-tap should still be able to catch it
+        if (Math.hypot(p.x - from.x, p.y - from.y) > s * 0.7) return p;
       }
-      return { x: minX + Math.random() * spanX, y: minY + Math.random() * spanY };
+      return {
+        x: minX + Math.random() * spanX,
+        y: minY + Math.random() * spanY,
+      };
     },
-    [insets]
+    [insets],
   );
 
   const onRootLayout = useCallback(
     (e: LayoutChangeEvent) => {
       const { width, height } = e.nativeEvent.layout;
       size.current = { w: width, h: height };
-      setPos((from) => pickPos(from));
+      const s = fitSize();
+      setShapeSize(s);
+      setPos((from) => pickPos(from, s));
       setReady(true);
     },
-    [pickPos]
+    [fitSize, pickPos],
   );
 
   const onTapShape = useCallback(() => {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    playSound("pop");
-    setScore((s) => s + 1);
+    taps.current += 1;
+    setScore(taps.current);
+
+    // every few taps, pay it off with a burst — a number a pre-reader can't
+    // read is not a reward on its own
+    if (taps.current % CELEBRATE_EVERY === 0) {
+      playSound("win");
+      setCelebrate(true);
+    } else {
+      playSound("pop");
+    }
+
     setShape(SHAPES[Math.floor(Math.random() * SHAPES.length)]);
-    setPos((from) => pickPos(from));
-  }, [pickPos]);
+    setPos((from) => pickPos(from, shapeSize));
+  }, [pickPos, shapeSize]);
 
   return (
     <View
@@ -108,8 +139,8 @@ export default function TapTheShape() {
             position: "absolute",
             left: pos.x,
             top: pos.y,
-            width: SHAPE_SIZE,
-            height: SHAPE_SIZE,
+            width: shapeSize,
+            height: shapeSize,
             alignItems: "center",
             justifyContent: "center",
             borderRadius: theme.radius.lg,
@@ -119,10 +150,14 @@ export default function TapTheShape() {
           })}
         >
           <Breathing>
-            <Text style={{ fontSize: 88 }}>{shape}</Text>
+            <Text style={{ fontSize: Math.round(shapeSize * 0.62) }}>
+              {shape}
+            </Text>
           </Breathing>
         </Pressable>
       )}
+
+      {celebrate && <Celebration onDone={() => setCelebrate(false)} />}
     </View>
   );
 }

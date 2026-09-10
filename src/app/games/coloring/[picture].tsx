@@ -1,6 +1,6 @@
 import * as Haptics from "expo-haptics";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { LayoutChangeEvent, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -9,16 +9,41 @@ import { ColoringCanvas } from "@/game/ColoringCanvas";
 import { HoldButton } from "@/components/HoldButton";
 import { Txt } from "@/components/Txt";
 import { BLANK, ERASER, PALETTE, type Swatch } from "@/game/palette";
-import { getPicture } from "@/game/pictures";
+import { getPicture, type Region } from "@/game/pictures";
 import { playSound } from "@/game/sounds";
+import { speak } from "@/game/speak";
 import { theme } from "@/theme";
 
 const SWATCHES: Swatch[] = [...PALETTE, ERASER];
+
+// fat toddler targets, stacked in a side rail (landscape has width to spare,
+// not height — a bottom strip stole the canvas's room)
+const SWATCH = 58;
+const RAIL_W = 156;
+const ERASER_BG = "#ECECF1"; // a visible "surface", so the eraser reads as a button not a blank hole
+
+/**
+ * Tiny accent regions — butterfly spots, fish bubbles, rocket stars, small
+ * windows. Still colorable, but they don't gate the celebration: a 2yo can't
+ * reliably land a 6px dot, and being forever "one bubble short of done" is the
+ * opposite of the payoff we want.
+ */
+function isMinor(r: Region): boolean {
+  if (r.kind === "circle") return r.r < 14;
+  if (r.kind === "ellipse") return Math.min(r.rx, r.ry) < 12;
+  if (r.kind === "rect") return Math.min(r.width, r.height) < 30;
+  return false;
+}
 
 export default function ColoringScreen() {
   const router = useRouter();
   const { picture: pictureId } = useLocalSearchParams<{ picture: string }>();
   const picture = useMemo(() => getPicture(pictureId), [pictureId]);
+  // regions that must be filled for "done" (minor accents don't count)
+  const required = useMemo(
+    () => (picture ? picture.regions.filter((r) => !isMinor(r)) : []),
+    [picture],
+  );
 
   const [fills, setFills] = useState<Record<string, string>>({});
   const [selected, setSelected] = useState<Swatch>(PALETTE[0]);
@@ -35,9 +60,21 @@ export default function ColoringScreen() {
     (id: string) => {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       playSound("pop");
-      setFills((prev) => ({ ...prev, [id]: selected.color }));
+      const next = { ...fills, [id]: selected.color };
+      setFills(next);
+
+      // check for "done" right here, off the tap — no effect needed
+      if (
+        !celebrated &&
+        required.length > 0 &&
+        required.every((r) => next[r.id] && next[r.id] !== BLANK)
+      ) {
+        setCelebrated(true);
+        setShowCelebration(true);
+        playSound("win");
+      }
     },
-    [selected]
+    [fills, selected, celebrated, required],
   );
 
   const reset = useCallback(() => {
@@ -47,27 +84,23 @@ export default function ColoringScreen() {
     setShowCelebration(false);
   }, []);
 
-  // fire celebration once when every region has a non-blank color
-  useEffect(() => {
-    if (!picture || celebrated) return;
-    const done = picture.regions.every(
-      (r) => fills[r.id] && fills[r.id] !== BLANK
-    );
-    if (done) {
-      setCelebrated(true);
-      setShowCelebration(true);
-      playSound("win");
-    }
-  }, [fills, picture, celebrated]);
-
   if (!picture) {
     return (
       <SafeAreaView className="flex-1 items-center justify-center bg-bg">
         <Txt variant="title">Picture not found</Txt>
         <Pressable
+          // NativeWind's jsx interop drops the function-form `style`; opt out so
+          // plain RN keeps it (see tap-the-shape.tsx).
+          {...({ cssInterop: false } as object)}
           onPress={() => router.back()}
-          style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
-          className="mt-4 rounded-full bg-berry px-6 py-3"
+          style={({ pressed }) => ({
+            marginTop: 16,
+            borderRadius: theme.radius.full,
+            backgroundColor: theme.color.berry,
+            paddingHorizontal: 24,
+            paddingVertical: 12,
+            opacity: pressed ? 0.7 : 1,
+          })}
         >
           <Txt variant="label" style={{ color: "#FFFFFF" }}>
             Go back
@@ -96,58 +129,81 @@ export default function ColoringScreen() {
         />
       </View>
 
-      {/* canvas */}
-      <View
-        className="flex-1 items-center justify-center"
-        onLayout={onCanvasLayout}
-      >
-        {canvas > 0 && (
-          <ColoringCanvas
-            picture={picture}
-            fills={fills}
-            onTapRegion={onTapRegion}
-            width={canvas}
-            height={canvas}
-          />
-        )}
-      </View>
+      {/* canvas left, colour rail right — the drawing gets the full height */}
+      <View className="flex-1 flex-row">
+        <View
+          className="flex-1 items-center justify-center"
+          onLayout={onCanvasLayout}
+        >
+          {canvas > 0 && (
+            <ColoringCanvas
+              picture={picture}
+              fills={fills}
+              onTapRegion={onTapRegion}
+              width={canvas}
+              height={canvas}
+            />
+          )}
+        </View>
 
-      {/* palette — one row, big targets, selected lifts + rings */}
-      <View className="flex-row flex-wrap items-end justify-center gap-3 px-4 pb-3">
-        {SWATCHES.map((s) => {
-          const isSelected = s.id === selected.id;
-          const isEraser = s.id === ERASER.id;
-          return (
-            <Pressable
-              key={s.id}
-              accessibilityRole="button"
-              accessibilityLabel={s.label}
-              accessibilityState={{ selected: isSelected }}
-              hitSlop={6}
-              onPress={() => {
-                Haptics.selectionAsync();
-                playSound("tap");
-                setSelected(s);
-              }}
-              className="h-16 w-16 items-center justify-center rounded-full"
-              style={({ pressed }) => ({
-                backgroundColor: s.color,
-                borderWidth: isSelected ? 5 : 3,
-                borderColor: isSelected
-                  ? theme.color.ink
-                  : isEraser
-                    ? "#D4D4D4"
-                    : "#FFFFFF",
-                transform: [
-                  { scale: isSelected ? 1.12 : pressed ? 0.94 : 1 },
-                  { translateY: isSelected ? -4 : 0 },
-                ],
-              })}
-            >
-              {isEraser && <Text style={{ fontSize: 22 }}>🧽</Text>}
-            </Pressable>
-          );
-        })}
+        {/* the chosen colour lifts, rings and casts a shadow so a pre-reader
+            can see "this is the one" at a glance */}
+        <View
+          style={{
+            width: RAIL_W,
+            flexDirection: "row",
+            flexWrap: "wrap",
+            alignContent: "center",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 12,
+            paddingHorizontal: 12,
+            paddingBottom: 8,
+          }}
+        >
+          {SWATCHES.map((s) => {
+            const isSelected = s.id === selected.id;
+            const isEraser = s.id === ERASER.id;
+            return (
+              <Pressable
+                key={s.id}
+                // NativeWind's jsx interop can't evaluate a function-form `style`
+                // and silently drops it — which zeroed the width/height and made
+                // every swatch vanish. Opt out; plain RN honours the style.
+                {...({ cssInterop: false } as object)}
+                accessibilityRole="button"
+                accessibilityLabel={s.label}
+                accessibilityState={{ selected: isSelected }}
+                hitSlop={12}
+                onPress={() => {
+                  Haptics.selectionAsync();
+                  playSound("tap");
+                  speak(s.label); // name the colour — free language practice
+                  setSelected(s);
+                }}
+                style={({ pressed }) => ({
+                  width: SWATCH,
+                  height: SWATCH,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: theme.radius.full,
+                  backgroundColor: isEraser ? ERASER_BG : s.color,
+                  borderWidth: isSelected ? 6 : 3,
+                  borderColor: isSelected ? theme.color.ink : "#FFFFFF",
+                  boxShadow: isSelected
+                    ? theme.shadow.raised
+                    : theme.shadow.card,
+                  transform: [
+                    { scale: isSelected ? 1.14 : pressed ? 0.92 : 1 },
+                    { translateY: isSelected ? -6 : 0 },
+                  ],
+                })}
+              >
+                {isEraser && <Text style={{ fontSize: 26 }}>🧽</Text>}
+              </Pressable>
+            );
+          })}
+        </View>
       </View>
 
       {showCelebration && (
