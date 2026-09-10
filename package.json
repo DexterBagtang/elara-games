@@ -42,11 +42,12 @@
     "typescript": "~6.0.3"
   },
   "scripts": {
-    "start": "expo start",
+    "predev": "mkdir -p node_modules/.cache/metro",
+    "start": "npm run predev && TMPDIR=\"$(pwd)/node_modules/.cache/metro\" expo start",
     "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
+    "android": "npm run predev && TMPDIR=\"$(pwd)/node_modules/.cache/metro\" expo start --android",
+    "ios": "npm run predev && TMPDIR=\"$(pwd)/node_modules/.cache/metro\" expo start --ios",
+    "web": "npm run predev && TMPDIR=\"$(pwd)/node_modules/.cache/metro\" expo start --web",
     "lint": "expo lint",
     "gen:pictures": "node ./scripts/generate-pictures.mjs",
     "gen:sounds": "node ./scripts/generate-sounds.mjs"
