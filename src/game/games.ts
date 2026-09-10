@@ -17,4 +17,11 @@ export const GAMES: Game[] = [
     color: "bg-sun",
     route: "/games/tap-the-shape",
   },
+  {
+    id: "coloring",
+    title: "Coloring",
+    emoji: "🎨",
+    color: "bg-berry",
+    route: "/games/coloring",
+  },
 ];
