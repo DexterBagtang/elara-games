@@ -1,9 +1,8 @@
 import "../global.css";
 
-import { Stack } from "expo-router";
-import * as ScreenOrientation from "expo-screen-orientation";
-import * as SplashScreen from "expo-splash-screen";
 import { useKeepAwake } from "expo-keep-awake";
+import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 
@@ -14,9 +13,7 @@ export default function RootLayout() {
   useKeepAwake();
 
   useEffect(() => {
-    ScreenOrientation.lockAsync(
-      ScreenOrientation.OrientationLock.LANDSCAPE
-    ).finally(() => SplashScreen.hideAsync());
+    SplashScreen.hideAsync();
   }, []);
 
   return (
@@ -25,6 +22,9 @@ export default function RootLayout() {
       <Stack
         screenOptions={{
           headerShown: false,
+          // recommended per-screen orientation (react-native-screens);
+          // applies to every route in this stack
+          orientation: "landscape",
           contentStyle: { backgroundColor: "#FFFDF5" },
           animation: "fade",
         }}
