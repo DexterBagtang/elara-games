@@ -9,6 +9,7 @@ import { Breathing } from "@/components/Breathing";
 import { HoldButton } from "@/components/HoldButton";
 import { Celebration } from "@/game/Celebration";
 import { nextRound, type Animal } from "@/game/animals";
+import { playAnimalSound } from "@/game/animalSounds";
 import { playSound } from "@/game/sounds";
 import { speak, stopSpeaking } from "@/game/speak";
 import { theme } from "@/theme";
@@ -40,10 +41,10 @@ export default function AnimalSounds() {
   const wrongCount = useRef(0);
   const advanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // speak the prompt a clear beat after each new round appears (long enough
-  // that the previous round's "Cow!" praise has finished first)
+  // play the real animal sound a clear beat after each new round appears
+  // (long enough that the previous round's "Cow!" praise has finished first)
   useEffect(() => {
-    const t = setTimeout(() => speak(round.target.says), 550);
+    const t = setTimeout(() => playAnimalSound(round.target.id), 550);
     return () => clearTimeout(t);
   }, [round]);
 
@@ -64,7 +65,7 @@ export default function AnimalSounds() {
         // wrong — no penalty, no scary noise, just nudge them to listen again
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         playSound("tap");
-        speak(round.target.says);
+        playAnimalSound(round.target.id);
         wrongCount.current += 1;
         if (wrongCount.current >= 2) setHinting(true); // show them the one
         return;
@@ -137,7 +138,7 @@ export default function AnimalSounds() {
         <Breathing>
           <SpeakerButton
             hidden={phase === "right"}
-            onPress={() => speak(round.target.says)}
+            onPress={() => playAnimalSound(round.target.id)}
           />
         </Breathing>
 

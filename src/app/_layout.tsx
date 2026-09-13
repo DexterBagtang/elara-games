@@ -14,6 +14,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 
+import { initAnimalSounds } from "@/game/animalSounds";
 import { initSounds } from "@/game/sounds";
 import { theme } from "@/theme";
 
@@ -33,6 +34,7 @@ export default function RootLayout() {
 
   useEffect(() => {
     initSounds();
+    initAnimalSounds();
   }, []);
 
   useEffect(() => {
