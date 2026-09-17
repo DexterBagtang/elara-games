@@ -33,4 +33,11 @@ export const GAMES: Game[] = [
     color: theme.color.grass,
     route: "/games/animal-sounds",
   },
+  {
+    id: "sort-by-color",
+    title: "Sort by Color",
+    emoji: "🌈",
+    color: theme.color.sky,
+    route: "/games/sort-by-color",
+  },
 ];
