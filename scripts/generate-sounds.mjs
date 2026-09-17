@@ -51,16 +51,9 @@ const SOUNDS = {
     tone(b, { dur: 0.07, freq: 1100, vol: 0.22, decay: 45, attack: 0.002 });
   }),
 
-  // finished the picture — little C-major arpeggio + sparkle
-  win: render(1.3, (b) => {
-    const notes = [523.25, 659.25, 783.99, 1046.5]; // C5 E5 G5 C6
-    notes.forEach((f, i) => {
-      tone(b, { start: i * 0.13, dur: 0.9, freq: f, vol: 0.26, decay: 4 });
-      tone(b, { start: i * 0.13, dur: 0.5, freq: f * 2, vol: 0.08, decay: 8 });
-    });
-    // sparkle tail
-    tone(b, { start: 0.55, dur: 0.7, freq: 2093, vol: 0.06, decay: 5 });
-  }),
+  // "win" is no longer generated here — sounds.ts points it at a real
+  // crowd-cheer clip (assets/sounds/win-cheer.mp3) instead. See the
+  // licensing note at the top of src/game/sounds.ts.
 };
 
 mkdirSync(OUT_DIR, { recursive: true });
