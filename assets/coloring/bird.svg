@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" data-title="Bird" data-emoji="🐦">
+  <g id="decorations">
+    <path d="M92 216 L 92 234"/>
+    <path d="M122 216 L 122 234"/>
+  </g>
+  <path id="tail" d="M48 130 C 16 112 2 136 4 166 C 8 190 32 196 56 180 C 48 164 44 144 48 130 Z"/>
+  <ellipse id="body" cx="104" cy="148" rx="78" ry="72"/>
+  <path id="wing" d="M112 122 C 86 152 90 196 124 214 C 154 202 166 166 152 138 C 138 118 120 112 112 122 Z"/>
+  <circle id="head" cx="182" cy="90" r="40"/>
+  <path id="beak" d="M216 82 L 240 90 L 216 98 Z"/>
+  <circle id="eye" cx="194" cy="78" r="6"/>
+</svg>

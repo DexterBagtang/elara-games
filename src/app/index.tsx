@@ -1,5 +1,4 @@
 import { useRouter } from "expo-router";
-import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -7,17 +6,21 @@ import { Breathing } from "@/components/Breathing";
 import { HoldButton } from "@/components/HoldButton";
 import { Txt } from "@/components/Txt";
 import { GAMES } from "@/game/games";
-import { isSoundEnabled, playSound, setSoundEnabled } from "@/game/sounds";
+import { playSound } from "@/game/sounds";
+import { setSoundSetting, useSettings } from "@/game/settings";
 import { theme } from "@/theme";
 
 export default function HomeScreen() {
   const router = useRouter();
-  const [soundOn, setSoundOn] = useState(isSoundEnabled());
+  const settings = useSettings();
+  const soundOn = settings.soundEnabled;
+  const visibleGames = GAMES.filter((g) =>
+    settings.enabledGameIds.includes(g.id),
+  );
 
   const toggleSound = () => {
     const next = !soundOn;
-    setSoundEnabled(next);
-    setSoundOn(next);
+    setSoundSetting(next);
     if (next) playSound("tap");
   };
 
@@ -26,19 +29,26 @@ export default function HomeScreen() {
       {/* grown-up chrome — small, out of the way */}
       <View className="flex-row items-center justify-between px-6 pt-3">
         <Txt variant="display">Elara Games</Txt>
-        {/* grown-up only: hold to toggle. A single tap here would let a toddler
-            mute the whole app — and silently break Animal Sounds — with one
-            stray corner poke. Hold-to-fire matches the "go home" button. */}
-        <HoldButton
-          emoji={soundOn ? "🔊" : "🔇"}
-          accessibilityLabel={soundOn ? "Turn sound off" : "Turn sound on"}
-          onHold={toggleSound}
-        />
+        {/* grown-up only: hold to fire, same reasoning for both buttons. A
+            single tap here would let a toddler mute the app or wander into
+            settings with one stray corner poke. */}
+        <View className="flex-row items-center gap-3">
+          <HoldButton
+            emoji={soundOn ? "🔊" : "🔇"}
+            accessibilityLabel={soundOn ? "Turn sound off" : "Turn sound on"}
+            onHold={toggleSound}
+          />
+          <HoldButton
+            emoji="⚙️"
+            accessibilityLabel="Parent settings"
+            onHold={() => router.push("/settings")}
+          />
+        </View>
       </View>
 
       {/* the toddler's whole world: big pokeable cards, centered */}
       <View className="flex-1 flex-row flex-wrap items-center justify-center gap-8 p-6">
-        {GAMES.map((game, i) => (
+        {visibleGames.map((game, i) => (
           <Breathing key={game.id} delay={i * 400}>
             {/* plain Pressable, NOT <Link asChild>: expo-router's Slot merges a
                 function-form `style` as `{...fn}` === `{}` and silently drops

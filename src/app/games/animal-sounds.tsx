@@ -12,6 +12,7 @@ import { nextRound, type Animal } from "@/game/animals";
 import { playAnimalSound } from "@/game/animalSounds";
 import { playSound } from "@/game/sounds";
 import { speak, stopSpeaking } from "@/game/speak";
+import { goHome } from "@/lib/goHome";
 import { theme } from "@/theme";
 
 const HEADER_H = 76;
@@ -120,7 +121,7 @@ export default function AnimalSounds() {
         <HoldButton
           emoji="🏠"
           accessibilityLabel="Go home"
-          onHold={() => router.back()}
+          onHold={() => goHome(router)}
         />
       </View>
 

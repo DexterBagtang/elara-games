@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" data-title="Dinosaur" data-emoji="🦕">
+  <g id="decorations">
+    <path d="M188 50 q 8 6 4 14"/>
+  </g>
+  <path id="tail" d="M64 140 C 30 130 10 140 4 156 C 10 170 34 172 62 164 Z"/>
+  <ellipse id="body" cx="120" cy="150" rx="60" ry="40"/>
+  <path id="neck" d="M156 130 C 176 100 190 74 192 52 C 172 52 156 70 148 96 C 146 110 150 122 156 130 Z"/>
+  <ellipse id="head" cx="198" cy="44" rx="26" ry="22"/>
+  <rect id="leg-front" x="150" y="176" width="20" height="40" rx="6"/>
+  <rect id="leg-back" x="90" y="176" width="20" height="40" rx="6"/>
+  <circle id="eye" cx="206" cy="38" r="5"/>
+</svg>

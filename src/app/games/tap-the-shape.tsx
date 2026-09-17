@@ -9,6 +9,7 @@ import { HoldButton } from "@/components/HoldButton";
 import { Txt } from "@/components/Txt";
 import { Celebration } from "@/game/Celebration";
 import { playSound } from "@/game/sounds";
+import { goHome } from "@/lib/goHome";
 import { theme } from "@/theme";
 
 const SHAPES = ["⭐️", "🔵", "🔺", "❤️", "🟩", "🌙", "🟠", "💜"] as const;
@@ -116,7 +117,7 @@ export default function TapTheShape() {
         <HoldButton
           emoji="🏠"
           accessibilityLabel="Go home"
-          onHold={() => router.back()}
+          onHold={() => goHome(router)}
         />
         <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
           <Text style={{ fontSize: 30 }}>⭐️</Text>

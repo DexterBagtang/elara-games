@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" data-title="Whale" data-emoji="🐋">
+  <g id="decorations">
+    <path d="M56 68 q 4 -16 -2 -30"/>
+    <path d="M68 68 q 8 -20 -2 -36"/>
+  </g>
+  <path id="fin" d="M62 176 C 46 202 28 212 14 208 C 24 186 40 172 58 164 Z"/>
+  <path id="tail-fluke" d="M158 120 C 176 80 196 40 214 18 C 210 46 202 70 214 92 C 224 70 230 46 236 24 C 232 62 224 100 196 128 C 182 138 168 132 158 120 Z"/>
+  <ellipse id="body" cx="96" cy="146" rx="84" ry="58"/>
+  <path id="belly" d="M14 156 C 46 186 148 186 178 156 C 148 174 46 174 14 156 Z"/>
+  <ellipse id="blowhole" cx="60" cy="92" rx="6" ry="3"/>
+  <circle id="eye" cx="46" cy="128" r="7"/>
+</svg>

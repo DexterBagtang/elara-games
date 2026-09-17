@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" data-title="Cat" data-emoji="🐱">
+  <g id="decorations">
+    <path d="M110 130 Q 120 138 130 130"/>
+  </g>
+  <path id="tail" d="M170 220 C 210 210 224 170 210 130 C 226 168 220 214 176 232 Z"/>
+  <path id="body" d="M70 236 C 60 180 70 140 120 140 C 170 140 180 180 170 236 Z"/>
+  <path id="ear-left" d="M78 66 C 70 46 62 30 66 20 C 82 30 100 44 108 54 C 96 60 86 64 78 66 Z"/>
+  <path id="ear-right" d="M162 66 C 170 46 178 30 174 20 C 158 30 140 44 132 54 C 144 60 154 64 162 66 Z"/>
+  <circle id="head" cx="120" cy="100" r="50"/>
+  <circle id="eye-left" cx="100" cy="96" r="7"/>
+  <circle id="eye-right" cx="140" cy="96" r="7"/>
+  <circle id="nose" cx="120" cy="118" r="6"/>
+</svg>

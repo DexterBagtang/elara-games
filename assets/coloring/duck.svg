@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" data-title="Duck" data-emoji="🦆">
+  <g id="decorations">
+    <path d="M30 230 q 24 10 48 0"/>
+    <path d="M120 232 q 24 10 48 0"/>
+  </g>
+  <path id="tail" d="M28 132 C 12 118 8 98 20 84 C 32 98 36 118 38 136 Z"/>
+  <ellipse id="body" cx="108" cy="162" rx="90" ry="64"/>
+  <path id="wing" d="M68 142 C 48 170 54 204 88 216 C 114 208 124 178 110 152 C 96 134 78 132 68 142 Z"/>
+  <circle id="head" cx="168" cy="96" r="46"/>
+  <path id="bill" d="M206 92 C 226 88 240 94 240 104 C 240 114 224 118 204 112 Z"/>
+  <circle id="eye" cx="180" cy="82" r="6"/>
+</svg>

@@ -31,6 +31,11 @@ function RegionShape({
     strokeWidth: STROKE_W,
     strokeLinejoin: "round" as const,
     transform: region.transform,
+    // react-native-svg's web prepare() unconditionally does
+    // `clean.onClick = props.onPress` — passing onClick directly (to dodge
+    // its legacy Touchable mixin) gets overwritten with undefined. Passing
+    // onPress lets it convert to a real onClick itself; onPressIn keeps the
+    // faster touch-down response on native.
     onPress,
     onPressIn: onPress,
   };

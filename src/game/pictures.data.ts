@@ -5,6 +5,59 @@ import type { Picture } from "./pictures.types";
 
 export const PICTURES: Picture[] = [
   {
+    "id": "bird",
+    "title": "Bird",
+    "emoji": "🐦",
+    "viewBox": "0 0 240 240",
+    "regions": [
+      {
+        "id": "tail",
+        "kind": "path",
+        "d": "M48 130 C 16 112 2 136 4 166 C 8 190 32 196 56 180 C 48 164 44 144 48 130 Z"
+      },
+      {
+        "id": "body",
+        "kind": "ellipse",
+        "cx": 104,
+        "cy": 148,
+        "rx": 78,
+        "ry": 72
+      },
+      {
+        "id": "wing",
+        "kind": "path",
+        "d": "M112 122 C 86 152 90 196 124 214 C 154 202 166 166 152 138 C 138 118 120 112 112 122 Z"
+      },
+      {
+        "id": "head",
+        "kind": "circle",
+        "cx": 182,
+        "cy": 90,
+        "r": 40
+      },
+      {
+        "id": "beak",
+        "kind": "path",
+        "d": "M216 82 L 240 90 L 216 98 Z"
+      },
+      {
+        "id": "eye",
+        "kind": "circle",
+        "cx": 194,
+        "cy": 78,
+        "r": 6
+      }
+    ],
+    "decorations": [
+      {
+        "d": "M92 216 L 92 234"
+      },
+      {
+        "d": "M122 216 L 122 234"
+      }
+    ]
+  },
+  {
     "id": "butterfly",
     "title": "Butterfly",
     "emoji": "🦋",
@@ -66,6 +119,184 @@ export const PICTURES: Picture[] = [
       },
       {
         "d": "M120 64 C 132 42 148 32 162 28"
+      }
+    ]
+  },
+  {
+    "id": "cat",
+    "title": "Cat",
+    "emoji": "🐱",
+    "viewBox": "0 0 240 240",
+    "regions": [
+      {
+        "id": "tail",
+        "kind": "path",
+        "d": "M170 220 C 210 210 224 170 210 130 C 226 168 220 214 176 232 Z"
+      },
+      {
+        "id": "body",
+        "kind": "path",
+        "d": "M70 236 C 60 180 70 140 120 140 C 170 140 180 180 170 236 Z"
+      },
+      {
+        "id": "ear-left",
+        "kind": "path",
+        "d": "M78 66 C 70 46 62 30 66 20 C 82 30 100 44 108 54 C 96 60 86 64 78 66 Z"
+      },
+      {
+        "id": "ear-right",
+        "kind": "path",
+        "d": "M162 66 C 170 46 178 30 174 20 C 158 30 140 44 132 54 C 144 60 154 64 162 66 Z"
+      },
+      {
+        "id": "head",
+        "kind": "circle",
+        "cx": 120,
+        "cy": 100,
+        "r": 50
+      },
+      {
+        "id": "eye-left",
+        "kind": "circle",
+        "cx": 100,
+        "cy": 96,
+        "r": 7
+      },
+      {
+        "id": "eye-right",
+        "kind": "circle",
+        "cx": 140,
+        "cy": 96,
+        "r": 7
+      },
+      {
+        "id": "nose",
+        "kind": "circle",
+        "cx": 120,
+        "cy": 118,
+        "r": 6
+      }
+    ],
+    "decorations": [
+      {
+        "d": "M110 130 Q 120 138 130 130"
+      }
+    ]
+  },
+  {
+    "id": "dinosaur",
+    "title": "Dinosaur",
+    "emoji": "🦕",
+    "viewBox": "0 0 240 240",
+    "regions": [
+      {
+        "id": "tail",
+        "kind": "path",
+        "d": "M64 140 C 30 130 10 140 4 156 C 10 170 34 172 62 164 Z"
+      },
+      {
+        "id": "body",
+        "kind": "ellipse",
+        "cx": 120,
+        "cy": 150,
+        "rx": 60,
+        "ry": 40
+      },
+      {
+        "id": "neck",
+        "kind": "path",
+        "d": "M156 130 C 176 100 190 74 192 52 C 172 52 156 70 148 96 C 146 110 150 122 156 130 Z"
+      },
+      {
+        "id": "head",
+        "kind": "ellipse",
+        "cx": 198,
+        "cy": 44,
+        "rx": 26,
+        "ry": 22
+      },
+      {
+        "id": "leg-front",
+        "kind": "rect",
+        "x": 150,
+        "y": 176,
+        "width": 20,
+        "height": 40,
+        "rx": 6
+      },
+      {
+        "id": "leg-back",
+        "kind": "rect",
+        "x": 90,
+        "y": 176,
+        "width": 20,
+        "height": 40,
+        "rx": 6
+      },
+      {
+        "id": "eye",
+        "kind": "circle",
+        "cx": 206,
+        "cy": 38,
+        "r": 5
+      }
+    ],
+    "decorations": [
+      {
+        "d": "M188 50 q 8 6 4 14"
+      }
+    ]
+  },
+  {
+    "id": "duck",
+    "title": "Duck",
+    "emoji": "🦆",
+    "viewBox": "0 0 240 240",
+    "regions": [
+      {
+        "id": "tail",
+        "kind": "path",
+        "d": "M28 132 C 12 118 8 98 20 84 C 32 98 36 118 38 136 Z"
+      },
+      {
+        "id": "body",
+        "kind": "ellipse",
+        "cx": 108,
+        "cy": 162,
+        "rx": 90,
+        "ry": 64
+      },
+      {
+        "id": "wing",
+        "kind": "path",
+        "d": "M68 142 C 48 170 54 204 88 216 C 114 208 124 178 110 152 C 96 134 78 132 68 142 Z"
+      },
+      {
+        "id": "head",
+        "kind": "circle",
+        "cx": 168,
+        "cy": 96,
+        "r": 46
+      },
+      {
+        "id": "bill",
+        "kind": "path",
+        "d": "M206 92 C 226 88 240 94 240 104 C 240 114 224 118 204 112 Z"
+      },
+      {
+        "id": "eye",
+        "kind": "circle",
+        "cx": 180,
+        "cy": 82,
+        "r": 6
+      }
+    ],
+    "decorations": [
+      {
+        "d": "M30 230 q 24 10 48 0"
+      },
+      {
+        "d": "M120 232 q 24 10 48 0"
       }
     ]
   },
@@ -331,5 +562,59 @@ export const PICTURES: Picture[] = [
       }
     ],
     "decorations": []
+  },
+  {
+    "id": "whale",
+    "title": "Whale",
+    "emoji": "🐋",
+    "viewBox": "0 0 240 240",
+    "regions": [
+      {
+        "id": "fin",
+        "kind": "path",
+        "d": "M62 176 C 46 202 28 212 14 208 C 24 186 40 172 58 164 Z"
+      },
+      {
+        "id": "tail-fluke",
+        "kind": "path",
+        "d": "M158 120 C 176 80 196 40 214 18 C 210 46 202 70 214 92 C 224 70 230 46 236 24 C 232 62 224 100 196 128 C 182 138 168 132 158 120 Z"
+      },
+      {
+        "id": "body",
+        "kind": "ellipse",
+        "cx": 96,
+        "cy": 146,
+        "rx": 84,
+        "ry": 58
+      },
+      {
+        "id": "belly",
+        "kind": "path",
+        "d": "M14 156 C 46 186 148 186 178 156 C 148 174 46 174 14 156 Z"
+      },
+      {
+        "id": "blowhole",
+        "kind": "ellipse",
+        "cx": 60,
+        "cy": 92,
+        "rx": 6,
+        "ry": 3
+      },
+      {
+        "id": "eye",
+        "kind": "circle",
+        "cx": 46,
+        "cy": 128,
+        "r": 7
+      }
+    ],
+    "decorations": [
+      {
+        "d": "M56 68 q 4 -16 -2 -30"
+      },
+      {
+        "d": "M68 68 q 8 -20 -2 -36"
+      }
+    ]
   }
 ];

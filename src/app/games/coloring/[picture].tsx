@@ -1,10 +1,11 @@
 import * as Haptics from "expo-haptics";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { LayoutChangeEvent, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Celebration } from "@/game/Celebration";
+import { clearFills, loadFills, saveFills } from "@/game/coloringProgress";
 import { ColoringCanvas } from "@/game/ColoringCanvas";
 import { HoldButton } from "@/components/HoldButton";
 import { Txt } from "@/components/Txt";
@@ -12,6 +13,7 @@ import { BLANK, ERASER, PALETTE, type Swatch } from "@/game/palette";
 import { getPicture, type Region } from "@/game/pictures";
 import { playSound } from "@/game/sounds";
 import { speak } from "@/game/speak";
+import { goHome } from "@/lib/goHome";
 import { theme } from "@/theme";
 
 const SWATCHES: Swatch[] = [...PALETTE, ERASER];
@@ -50,6 +52,33 @@ export default function ColoringScreen() {
   const [canvas, setCanvas] = useState(0);
   const [celebrated, setCelebrated] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
+  // guards the save effect from overwriting saved progress with the blank
+  // initial state before the load below has finished
+  const loadedFor = useRef<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (!picture) return;
+    let cancelled = false;
+    loadFills(picture.id).then((saved) => {
+      if (cancelled) return;
+      setFills(saved);
+      if (
+        required.length > 0 &&
+        required.every((r) => saved[r.id] && saved[r.id] !== BLANK)
+      ) {
+        setCelebrated(true); // already finished on a prior visit — don't replay
+      }
+      loadedFor.current = picture.id;
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [picture, required]);
+
+  useEffect(() => {
+    if (!picture || loadedFor.current !== picture.id) return;
+    saveFills(picture.id, fills);
+  }, [picture, fills]);
 
   const onCanvasLayout = useCallback((e: LayoutChangeEvent) => {
     const { width, height } = e.nativeEvent.layout;
@@ -82,7 +111,8 @@ export default function ColoringScreen() {
     setFills({});
     setCelebrated(false);
     setShowCelebration(false);
-  }, []);
+    if (picture) clearFills(picture.id);
+  }, [picture]);
 
   if (!picture) {
     return (
@@ -92,7 +122,7 @@ export default function ColoringScreen() {
           // NativeWind's jsx interop drops the function-form `style`; opt out so
           // plain RN keeps it (see tap-the-shape.tsx).
           {...({ cssInterop: false } as object)}
-          onPress={() => router.back()}
+          onPress={() => goHome(router)}
           style={({ pressed }) => ({
             marginTop: 16,
             borderRadius: theme.radius.full,
@@ -111,13 +141,15 @@ export default function ColoringScreen() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-bg">
+    // remount per picture — resets fills/canvas/celebration state instead of
+    // manually clearing it in an effect
+    <SafeAreaView key={picture.id} className="flex-1 bg-bg">
       {/* top bar — both actions are hold-to-fire, toddler-proof */}
       <View className="flex-row items-center justify-between px-6 pt-2">
         <HoldButton
           emoji="🏠"
           accessibilityLabel="Go home"
-          onHold={() => router.back()}
+          onHold={() => goHome(router)}
         />
         <Txt variant="title">
           {picture.emoji} {picture.title}
