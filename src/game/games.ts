@@ -40,4 +40,11 @@ export const GAMES: Game[] = [
     color: theme.color.sky,
     route: "/games/sort-by-color",
   },
+  {
+    id: "feed-monster",
+    title: "Feed the Monster",
+    emoji: "👾",
+    color: theme.color.tangerine,
+    route: "/games/feed-monster",
+  },
 ];
